@@ -1,8 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { ProductsService } from '../../../products/services/products.service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-page',
   imports: [],
   templateUrl: './product-page.component.html',
 })
-export class ProductPageComponent { }
+export class ProductPageComponent {
+  activatedRoute = inject(ActivatedRoute);
+  productsService = inject(ProductsService);
+
+  productIdSlug = this.activatedRoute.snapshot.params['idSlug'];
+
+  productResource = rxResource({
+    params: () => ({ idSlug: this.productIdSlug }),
+    stream: ({ params }) => this.productsService.getProductByIdSlug(params.idSlug)
+  })
+}
