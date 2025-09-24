@@ -46,8 +46,4 @@ export class LoginPageComponent {
       }, 2000);
     })
   }
-
-  // Check Authentication
-  // Register
-  // Logout
 }
