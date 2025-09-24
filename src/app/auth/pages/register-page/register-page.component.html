@@ -1,4 +1,4 @@
-<form class="flex flex-col gap-2">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
   <label class="input input-bordered flex items-center gap-2">
     <svg class="h-[1em] opacity-50" viewBox="0 0 24 24">
       <g
@@ -12,7 +12,23 @@
         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
       </g>
     </svg>
-    <input type="email" placeholder="Email" required />
+    <input type="text" placeholder="Nombre y apellidos" required formControlName="fullName" />
+  </label>
+
+  <label class="input input-bordered flex items-center gap-2">
+    <svg class="h-[1em] opacity-50" viewBox="0 0 24 24">
+      <g
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        stroke-width="2.5"
+        fill="none"
+        stroke="currentColor"
+      >
+        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+      </g>
+    </svg>
+    <input type="email" placeholder="Correo electrónico" required formControlName="email" />
   </label>
 
   <label class="input input-bordered flex items-center gap-2">
@@ -34,9 +50,8 @@
       type="password"
       required
       placeholder="Contraseña"
-      minlength="8"
-      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-      title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+      formControlName="password"
     />
   </label>
 
@@ -47,3 +62,17 @@
     <a routerLink="/auth/login" class="text-secondary">Inicia sesión aquí</a>
   </p>
 </form>
+
+@if (hasError()) {
+<div role="alert" class="alert alert-error fixed top-10">
+  <svg class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+  <span class="font-bold">Por favor verifica los campos ingresados.</span>
+</div>
+}
