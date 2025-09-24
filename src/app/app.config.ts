@@ -4,6 +4,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 
 import { routes } from './app.routes';
 import { loggingInterceptor } from '@shared/interceptors/logging.interceptor';
+import { authInterceptor } from '@auth/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,6 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
 
-    provideHttpClient(withFetch(), withInterceptors([loggingInterceptor]))
+    provideHttpClient(withFetch(), withInterceptors([loggingInterceptor, authInterceptor]))
   ]
 };
