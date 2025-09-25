@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, input, OnChanges, SimpleChanges, viewChild } from '@angular/core';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 
@@ -18,9 +18,10 @@ import 'swiper/css/pagination';
     }
   `
 })
-export class ProductCarouselComponent implements AfterViewInit {
+export class ProductCarouselComponent implements AfterViewInit, OnChanges {
   images = input.required<string[]>();
   swiperDiv = viewChild.required<ElementRef>('swiperDiv');
+  swiper: Swiper | undefined = undefined;
 
   // Array para mostrar múltiples slides cuando no hay imágenes (necesario para Swiper)
   defaultSlides = [1, 2, 3];
@@ -30,12 +31,27 @@ export class ProductCarouselComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.swiperInit();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['images'].firstChange) {
+      return;
+    }
+
+    if (!this.swiper) return;
+
+    this.swiper.destroy(true, true);
+    this.swiperInit();
+  }
+
+  swiperInit() {
     const element = this.swiperDiv().nativeElement;
     if (!element) return;
 
     const hasMultipleImages = this.images().length > 1;
 
-    const swiper = new Swiper(element, {
+    this.swiper = new Swiper(element, {
       // Optional parameters
       direction: 'horizontal',
       loop: hasMultipleImages, // Sólo activar loop si hay múltiples imágenes
@@ -65,6 +81,5 @@ export class ProductCarouselComponent implements AfterViewInit {
       allowTouchMove: hasMultipleImages, // Sólo permitir deslizar si hay múltiples imágenes
       autoplay: false
     });
-
   }
 }
