@@ -30,10 +30,6 @@ export class ProductCarouselComponent implements AfterViewInit, OnChanges {
     return this.images().length > 1;
   }
 
-  ngAfterViewInit(): void {
-    this.swiperInit();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['images'].firstChange) {
       return;
@@ -42,6 +38,19 @@ export class ProductCarouselComponent implements AfterViewInit, OnChanges {
     if (!this.swiper) return;
 
     this.swiper.destroy(true, true);
+
+    const paginationEl: HTMLDivElement =
+      this.swiperDiv().nativeElement?.querySelector('.swiper-pagination');
+
+    paginationEl.innerHTML = '';
+
+    // Tricky time out -> Swiper do not notice the super fast changes from Angular, so we need to put a tricky timeout to wait till Swiper get noticed
+    setTimeout(() => {
+      this.swiperInit();
+    }, 100);
+  }
+
+  ngAfterViewInit(): void {
     this.swiperInit();
   }
 
