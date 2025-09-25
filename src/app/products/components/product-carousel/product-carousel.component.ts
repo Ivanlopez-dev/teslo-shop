@@ -22,34 +22,48 @@ export class ProductCarouselComponent implements AfterViewInit {
   images = input.required<string[]>();
   swiperDiv = viewChild.required<ElementRef>('swiperDiv');
 
+  // Array para mostrar múltiples slides cuando no hay imágenes (necesario para Swiper)
+  defaultSlides = [1, 2, 3];
+
+  shouldShowNavigation(): boolean {
+    return this.images().length > 1;
+  }
+
   ngAfterViewInit(): void {
     const element = this.swiperDiv().nativeElement;
     if (!element) return;
 
+    const hasMultipleImages = this.images().length > 1;
+
     const swiper = new Swiper(element, {
       // Optional parameters
       direction: 'horizontal',
-      loop: true,
+      loop: hasMultipleImages, // Sólo activar loop si hay múltiples imágenes
 
-      modules: [
-        Navigation, Pagination
-      ],
+      modules: [Navigation, Pagination],
 
       // If we need pagination
       pagination: {
         el: '.swiper-pagination',
+        clickable: true,
+        enabled: hasMultipleImages // Sólo habilitar paginación si hay múltiples imágenes
       },
 
       // Navigation arrows
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
+        enabled: hasMultipleImages // Sólo habilitar navegación si hay múltiples imágenes
       },
 
-      // And if we need scrollbar
+      // Scrollbar
       scrollbar: {
         el: '.swiper-scrollbar',
       },
+
+      // Configuración adicional para casos con pocas imágenes
+      allowTouchMove: hasMultipleImages, // Sólo permitir deslizar si hay múltiples imágenes
+      autoplay: false
     });
 
   }
