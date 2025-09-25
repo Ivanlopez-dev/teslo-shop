@@ -51,7 +51,6 @@ export class ProductsService {
         }
       })
       .pipe(
-        tap((resp) => console.log(resp)),
         tap((resp) => this.productsCache.set(key, resp))
       );
   }
