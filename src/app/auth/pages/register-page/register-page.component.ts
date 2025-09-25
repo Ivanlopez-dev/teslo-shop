@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { AuthService } from '@auth/services/auth.service';
+import { FormUtils } from '@utils/form-utils';
 
 @Component({
   selector: 'app-register-page',
@@ -17,9 +19,9 @@ export class RegisterPageComponent {
   router = inject(Router);
 
   registerForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern(FormUtils.emailPattern)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    fullName: ['', Validators.required],
+    fullName: ['', [Validators.required, Validators.pattern(FormUtils.namePattern)]],
   });
 
   onSubmit() {
