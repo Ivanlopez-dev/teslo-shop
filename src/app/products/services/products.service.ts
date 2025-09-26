@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, map, Observable, of, tap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { Gender, Product, ProductsResponse } from '@products/interfaces/product.interface';
 import { environment } from 'src/environments/environment';
@@ -79,13 +79,23 @@ export class ProductsService {
     );
   }
 
-  updateProduct(id: string, productLike: Partial<Product>): Observable<Product> {
-    return this.http
-      .patch<Product>(`${baseUrl}/products/${id}`, productLike)
-      .pipe(tap((product) => this.updateProductCache(product)));
+  updateProduct(id: string, productLike: Partial<Product>, imageFileList?: FileList): Observable<Product> {
+    const currentImages = productLike.images ?? [];
+
+    return this.uploadImages(imageFileList)
+      .pipe(
+        map(imageNames => ({
+          ...productLike,
+          images: [...currentImages, ...imageNames]
+        })),
+        switchMap((updatedProduct) =>
+          this.http.patch<Product>(`${baseUrl}/products/${id}`, updatedProduct)
+        ),
+        tap((product) => this.updateProductCache(product))
+      );
   }
 
-  createProduct(productLike: Partial<Product>): Observable<Product> {
+  createProduct(productLike: Partial<Product>, imageFileList?: FileList): Observable<Product> {
     return this.http
       .post<Product>(`${baseUrl}/products`, productLike)
       .pipe(tap((product) => this.updateProductCache(product)));
@@ -126,4 +136,3 @@ export class ProductsService {
       .pipe(map((resp) => resp.fileName));
   }
 }
-
