@@ -27,7 +27,8 @@
 
 1. 🤖 [**Introduction**](#introduction)
 2. ⚙️ [**Tech Stack**](#tech-stack)
-3. ⚡ [**Quick Start**](#quick-start)
+3. ✨ [**Features**](#features)
+4. ⚡ [**Quick Start**](#quick-start)
 
 ## <a name="introduction">🤖 Introduction</a>
 
@@ -91,6 +92,15 @@ Fifth section:
 - [**TypeScript**](https://www.typescriptlang.org/)
 - [**TailwindCSS**](https://tailwindcss.com/)
 - [**DaisyUI**](https://daisyui.com/docs/install/)
+
+
+## <a name="features">✨ Features</a>
+
+- **Register & Login**
+- **Products by Category (Men, Women, Kid, Unisex)**
+- **Product Detail**
+- **Admin Dashboard**
+- **Create & Edit products (Admin role only)**
 
 
 ## <a name="quick-start">⚡ Quick Start</a>
